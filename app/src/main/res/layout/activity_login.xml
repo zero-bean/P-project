@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_gradient"
+    tools:context=".LoginActivity">
+
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:text="JOB SHORTS"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.147" />
+
+    <TextView
+        android:id="@+id/signInWithGoogle"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:background="@drawable/box_login_google"
+        android:gravity="center"
+        android:paddingRight="8dp"
+        android:text="        Sign in with Google"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.749" />
+
+    <ImageView
+        android:id="@+id/googleLogo"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toBottomOf="@+id/signInWithGoogle"
+        app:layout_constraintEnd_toEndOf="@+id/signInWithGoogle"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/signInWithGoogle"
+        app:layout_constraintTop_toTopOf="@+id/signInWithGoogle"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/common_google_signin_btn_icon_dark_normal" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
