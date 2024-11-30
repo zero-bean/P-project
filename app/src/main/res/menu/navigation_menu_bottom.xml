@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_bar_item_1"
+        android:enabled="true"
+        android:icon="@drawable/baseline_badge_24"
+        android:title="@string/text_label_1"/>
+    <item
+        android:id="@+id/navigation_bar_item_2"
+        android:enabled="true"
+        android:icon="@drawable/baseline_assignment_24"
+        android:title="@string/text_label_2"/>
+    <item
+        android:id="@+id/navigation_bar_item_3"
+        android:enabled="true"
+        android:icon="@drawable/baseline_chat_24"
+        android:title="@string/text_label_3"/>
+</menu>

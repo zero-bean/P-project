@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                     UserData userData = dataSnapshot.getValue(UserData.class);
                     if (userData != null && (userData.getUserName() == null || userData.getUserName().isEmpty())) {
                         // If username is not set, navigate to SetUserNameFragment
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SetUserNameFragment()).commit();
+                        // getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SetUserNameFragment()).commit();
                     } else {
                         // If username is set, proceed with normal flow
                         initializeFragments();
@@ -64,9 +64,9 @@ public class MainActivity extends AppCompatActivity {
                 if (id == R.id.navigation_bar_item_1) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
                 } else if (id == R.id.navigation_bar_item_2) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SearchFragment()).commit();
+                    //
                 } else if (id == R.id.navigation_bar_item_3) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ChatFragment()).commit();
+                    //
                 }
                 return true;
             }
@@ -77,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
         fragment = new Fragment[3];
         fragment[0] = new HomeFragment();
-        fragment[1] = new SearchFragment();
-        fragment[2] = new ChatFragment();
+        fragment[1] = null;
+        fragment[2] = null;
 
         fragmentManager.beginTransaction().add(R.id.fragment_container, fragment[0]).commit();
     }

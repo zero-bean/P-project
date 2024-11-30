@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,7 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment {
     private final String TAG = "HomeFragment";
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
@@ -52,15 +51,15 @@ public class public class HomeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         profileNameTextView = rootView.findViewById(R.id.profileNameTextView);
-        changeProfileButton = rootView.findViewById(R.id.changeProfileButton);
+        //changeProfileButton = rootView.findViewById(R.id.changeProfileButton);
         logoutBtn = rootView.findViewById(R.id.logoutButton);
 
-        changeProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToSetUserNameFragment();
-            }
-        });
+        //changeProfileButton.setOnClickListener(new View.OnClickListener() {
+         //   @Override
+         //   public void onClick(View v) {
+        //navigateToSetUserNameFragment();
+          //  }
+        //});
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +84,7 @@ public class public class HomeFragment extends Fragment {
                         if (userData != null && userData.getUserName() != null) {
                             updateUserProfile(userData);
                         } else {
-                            navigateToSetUserNameFragment();
+                            //navigateToSetUserNameFragment();
                         }
                     } else {
                         Log.d(TAG, "FIREBASE 유저 데이터 초기화 시작");
@@ -115,7 +114,7 @@ public class public class HomeFragment extends Fragment {
 
         UserData tmp = new UserData(userUID, displayName);
         userRef.setValue(tmp);
-        navigateToSetUserNameFragment();
+        //navigateToSetUserNameFragment();
     }
 
     private void updateUserProfile(UserData userData) {
@@ -125,11 +124,12 @@ public class public class HomeFragment extends Fragment {
         }
     }
 
-    private void navigateToSetUserNameFragment() {
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        SetUserNameFragment setUserNameFragment = SetUserNameFragment.newInstance(true);
-        transaction.replace(R.id.fragment_container, setUserNameFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-}}
+   // private void navigateToSetUserNameFragment() {
+        //FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+        //SetUserNameFragment setUserNameFragment = SetUserNameFragment.newInstance(true);
+        //transaction.replace(R.id.fragment_container, setUserNameFragment);
+        //transaction.addToBackStack(null);
+        //transaction.commit();
+   // }
+//}
+}

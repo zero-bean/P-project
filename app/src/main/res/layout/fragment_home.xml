@@ -18,32 +18,20 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:text="GUEST"
+            android:text="테스트"
             android:textColor="@color/primary"
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/changeProfileButton"
-            android:layout_width="319dp"
-            android:layout_height="66dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/box_dialog_dark"
-            android:text="프로필 변경"
-            android:textColor="@color/primary_on"
-            android:textSize="25sp"
-            android:textStyle="bold" />
-
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/logoutButton"
             android:layout_width="319dp"
             android:layout_height="66dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
-            android:background="@drawable/box_dialog_dark"
+            android:background="@color/black"
             android:text="로그아웃"
-            android:textColor="@color/primary_on"
+            android:textColor="@color/white"
             android:textSize="25sp"
             android:textStyle="bold" />
 
