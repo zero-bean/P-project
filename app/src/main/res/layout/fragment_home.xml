@@ -4,37 +4,111 @@
     android:id="@+id/homeFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/box_background_rounded"
     tools:context=".HomeFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:weightSum="4">
 
-        <TextView
-            android:id="@+id/profileNameTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:text="테스트"
-            android:textColor="@color/primary"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+        <!-- 구역 1: 이름과 로그아웃 버튼 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp">
 
-        <Button
-            android:id="@+id/logoutButton"
-            android:layout_width="319dp"
-            android:layout_height="66dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:background="@color/black"
-            android:text="로그아웃"
-            android:textColor="@color/white"
-            android:textSize="25sp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/textview_username"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="4"
+                android:background="@drawable/spinner_background_rounded"
+                android:gravity="center_vertical"
+                android:text="이름"
+                android:textColor="@color/neutral"
+                android:textSize="16sp" />
 
+            <Button
+                android:id="@+id/logoutButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/button_background_rounded"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="로그아웃"
+                android:textColor="@color/neutral"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- 구역 2: 입력 스피너 칸 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <Spinner
+                android:id="@+id/spinner_education"
+                android:background="@drawable/spinner_background_rounded"
+                android:textColor="@color/neutral"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="12dp"
+                android:spinnerMode="dropdown" />
+
+            <Spinner
+                android:id="@+id/spinner_region"
+                android:background="@drawable/spinner_background_rounded"
+                android:textColor="@color/neutral"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="12dp"
+                android:spinnerMode="dropdown" />
+
+            <Spinner
+                android:id="@+id/spinner_experience"
+                android:background="@drawable/spinner_background_rounded"
+                android:textColor="@color/neutral"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="12dp"
+                android:spinnerMode="dropdown" />
+
+            <Spinner
+                android:id="@+id/spinner_job"
+                android:background="@drawable/spinner_background_rounded"
+                android:textColor="@color/neutral"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:spinnerMode="dropdown" />
+        </LinearLayout>
+
+        <!-- 구역 3: 버튼 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/button_saveNsearch"
+                android:layout_width="319dp"
+                android:layout_height="66dp"
+                android:background="@drawable/button_background_rounded"
+                android:text="저장 및 채용 정보 확인"
+                android:textColor="@color/neutral"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
-
 </FrameLayout>

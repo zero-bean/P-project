@@ -17,6 +17,7 @@ public class UserData {
     private String UID;
     @NonNull
     private String userName;
+    private Detail userDetail;
 
     @Override
     public boolean equals(Object obj) {
@@ -29,5 +30,8 @@ public class UserData {
         UserData userData = (UserData) obj;
         return UID.equals(userData.UID) &&
                 userName.equals(userData.userName);
+    }
+
+    public class Detail {
     }
 }
