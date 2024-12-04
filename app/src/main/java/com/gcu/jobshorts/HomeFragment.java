@@ -87,7 +87,8 @@ public class HomeFragment extends Fragment {
             } else {
                 String result = String.format("선택: %s, %s, %s, %s", selectedEducation, selectedRegion, selectedExperience, selectedJob);
                 Snackbar.make(rootView, "검색을 시작합니다. ", Snackbar.LENGTH_SHORT).show();
-                // 결과를 파이어 베이스에 저장하고, 서치프래그먼트 전환
+                sendUserDataToModel();
+                // 서치프래그먼트 전환
             }
         });
 
@@ -117,6 +118,33 @@ public class HomeFragment extends Fragment {
     private void updateUserProfile(UserData userData) {
         profileNameTextView.setText(userData.getUserName());
     }
+
+    private void sendUserDataToModel() {
+        String selectedEducation = spinnerEducation.getSelectedItem().toString();
+        String selectedRegion = spinnerRegion.getSelectedItem().toString();
+        String selectedExperience = spinnerExperience.getSelectedItem().toString();
+        String selectedJob = spinnerJob.getSelectedItem().toString();
+
+        UserData tmpUserData = sharedViewModel.getUserData().getValue();
+
+        if (tmpUserData != null) {
+            UserData.Detail tmpDetail = new UserData.Detail(
+                    selectedJob,
+                    selectedExperience,
+                    selectedEducation,
+                    selectedRegion
+            );
+
+            tmpUserData.setUserDetail(tmpDetail);
+
+            sharedViewModel.updateUserData(tmpUserData);
+        } else {
+            // 예외 처리
+            Snackbar.make(requireView(), "사용자 데이터를 불러오지 못했습니다.", Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+
 
     // 로그아웃
     private void logout() {

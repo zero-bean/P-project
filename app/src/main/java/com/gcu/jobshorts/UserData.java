@@ -32,6 +32,14 @@ public class UserData {
                 userName.equals(userData.userName);
     }
 
-    public class Detail {
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Detail {
+        private String occupation;
+        private String career;
+        private String education;
+        private String region;
     }
 }
