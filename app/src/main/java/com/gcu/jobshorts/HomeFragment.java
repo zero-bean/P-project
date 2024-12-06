@@ -117,7 +117,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void sendUserDataToModel(String experienceInput) {
-        String selectedEducation = spinnerEducation.getSelectedItem().toString();
+        int selectedEducationIndex = spinnerEducation.getSelectedItemPosition();
         String selectedRegion = spinnerRegion.getSelectedItem().toString();
         String selectedJob = spinnerJob.getSelectedItem().toString();
 
@@ -127,7 +127,7 @@ public class HomeFragment extends Fragment {
             UserData.Detail tmpDetail = new UserData.Detail(
                     selectedJob,
                     experienceInput,
-                    selectedEducation,
+                    String.valueOf(selectedEducationIndex),
                     selectedRegion
             );
 
