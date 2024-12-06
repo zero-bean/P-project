@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -23,15 +24,14 @@ import java.util.List;
 public class HomeFragment extends Fragment {
     private SharedViewModel sharedViewModel;
     private TextView profileNameTextView;
+    private EditText editTextExperience;
     private Button logoutBtn;
     private Button decideBtn;
     private Spinner spinnerEducation;
     private Spinner spinnerRegion;
-    private Spinner spinnerExperience;
     private Spinner spinnerJob;
     private List<String> educationOptions = Arrays.asList("최종 학력을 선택하세요", "고졸", "초대졸", "대졸", "석사", "박사");
     private List<String> regionOptions = Arrays.asList("희망 근무 지역을 선택하세요", "서울", "부산", "대구", "인천", "광주");
-    private List<String> experienceOptions = Arrays.asList("경력을 선택하세요", "없음", "1년 미만", "1~3년", "3~5년", "5년 이상");
     private List<String> jobOptions = Arrays.asList("직종을 선택하세요", "프론트엔드", "백엔드", "게임개발", "임베디드", "클라우드", "인공지능", "모바일", "기타");
 
     private FirebaseAuth mAuth;
@@ -51,6 +51,7 @@ public class HomeFragment extends Fragment {
 
         // UI 요소 초기화
         profileNameTextView = rootView.findViewById(R.id.textview_username);
+        editTextExperience = rootView.findViewById(R.id.edittext_experience);
         logoutBtn = rootView.findViewById(R.id.logoutButton);
         decideBtn = rootView.findViewById(R.id.button_saveNsearch);
 
@@ -76,18 +77,17 @@ public class HomeFragment extends Fragment {
         decideBtn.setOnClickListener(v -> {
             String selectedEducation = spinnerEducation.getSelectedItem().toString();
             String selectedRegion = spinnerRegion.getSelectedItem().toString();
-            String selectedExperience = spinnerExperience.getSelectedItem().toString();
+            String experienceInput = editTextExperience.getText().toString();
             String selectedJob = spinnerJob.getSelectedItem().toString();
 
             if (selectedEducation.equals(educationOptions.get(0)) ||
                     selectedRegion.equals(regionOptions.get(0)) ||
-                    selectedExperience.equals(experienceOptions.get(0)) ||
+                    experienceInput.isEmpty() ||
                     selectedJob.equals(jobOptions.get(0))) {
                 Snackbar.make(rootView, "모든 항목을 선택하세요. ", Snackbar.LENGTH_SHORT).show();
             } else {
-                String result = String.format("선택: %s, %s, %s, %s", selectedEducation, selectedRegion, selectedExperience, selectedJob);
                 Snackbar.make(rootView, "검색을 시작합니다. ", Snackbar.LENGTH_SHORT).show();
-                sendUserDataToModel();
+                sendUserDataToModel(experienceInput);
                 // 서치프래그먼트 전환
             }
         });
@@ -99,18 +99,15 @@ public class HomeFragment extends Fragment {
         // 스피너 변수 초기화
         spinnerEducation = rootView.findViewById(R.id.spinner_education);
         spinnerRegion = rootView.findViewById(R.id.spinner_region);
-        spinnerExperience = rootView.findViewById(R.id.spinner_experience);
         spinnerJob = rootView.findViewById(R.id.spinner_job);
 
         // Adapter 설정
         ArrayAdapter<String> educationAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, educationOptions);
         ArrayAdapter<String> regionAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, regionOptions);
-        ArrayAdapter<String> experienceAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, experienceOptions);
         ArrayAdapter<String> jobAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, jobOptions);
 
         spinnerEducation.setAdapter(educationAdapter);
         spinnerRegion.setAdapter(regionAdapter);
-        spinnerExperience.setAdapter(experienceAdapter);
         spinnerJob.setAdapter(jobAdapter);
     }
 
@@ -119,10 +116,9 @@ public class HomeFragment extends Fragment {
         profileNameTextView.setText(userData.getUserName());
     }
 
-    private void sendUserDataToModel() {
+    private void sendUserDataToModel(String experienceInput) {
         String selectedEducation = spinnerEducation.getSelectedItem().toString();
         String selectedRegion = spinnerRegion.getSelectedItem().toString();
-        String selectedExperience = spinnerExperience.getSelectedItem().toString();
         String selectedJob = spinnerJob.getSelectedItem().toString();
 
         UserData tmpUserData = sharedViewModel.getUserData().getValue();
@@ -130,7 +126,7 @@ public class HomeFragment extends Fragment {
         if (tmpUserData != null) {
             UserData.Detail tmpDetail = new UserData.Detail(
                     selectedJob,
-                    selectedExperience,
+                    experienceInput,
                     selectedEducation,
                     selectedRegion
             );
@@ -143,8 +139,6 @@ public class HomeFragment extends Fragment {
             Snackbar.make(requireView(), "사용자 데이터를 불러오지 못했습니다.", Snackbar.LENGTH_SHORT).show();
         }
     }
-
-
 
     // 로그아웃
     private void logout() {
