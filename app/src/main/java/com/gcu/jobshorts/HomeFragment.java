@@ -32,7 +32,7 @@ public class HomeFragment extends Fragment {
     private Spinner spinnerJob;
     private List<String> educationOptions = Arrays.asList("최종 학력을 선택하세요", "고졸", "초대졸", "대졸", "석사", "박사");
     private List<String> regionOptions = Arrays.asList("희망 근무 지역을 선택하세요", "서울", "부산", "대구", "인천", "광주");
-    private List<String> jobOptions = Arrays.asList("직종을 선택하세요", "프론트엔드", "백엔드", "게임개발", "임베디드", "클라우드", "인공지능", "모바일", "기타");
+    private List<String> jobOptions = Arrays.asList("직종을 선택하세요", "소프트웨어", "프론트엔드", "백엔드", "게임", "임베디드", "클라우드", "인공지능", "모바일", "기타");
 
     private FirebaseAuth mAuth;
 
@@ -86,11 +86,34 @@ public class HomeFragment extends Fragment {
                     selectedJob.equals(jobOptions.get(0))) {
                 Snackbar.make(rootView, "모든 항목을 선택하세요. ", Snackbar.LENGTH_SHORT).show();
             } else {
-                Snackbar.make(rootView, "검색을 시작합니다. ", Snackbar.LENGTH_SHORT).show();
-                sendUserDataToModel(experienceInput);
-                // 서치프래그먼트 전환
+                int minExperience = Integer.parseInt(experienceInput);
+                FirestoreHelper firestoreHelper = new FirestoreHelper();
+
+                firestoreHelper.fetchFilteredData(
+                        spinnerEducation.getSelectedItemPosition(),
+                        minExperience,
+                        selectedRegion,
+                        selectedJob,
+                        new FirestoreHelper.FirestoreCallback() {
+                            @Override
+                            public void onSuccess(List<JobData> jobList) {
+                                if (!jobList.isEmpty()) {
+                                    // 예: RecyclerView에 데이터 표시
+                                    Snackbar.make(rootView, "검색 성공! 총 " + jobList.size() + "건", Snackbar.LENGTH_SHORT).show();
+                                } else {
+                                    Snackbar.make(rootView, "조건에 맞는 결과가 없습니다.", Snackbar.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+                                Snackbar.make(rootView, "데이터 검색 중 오류 발생: " + e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
+
+
 
         return rootView;
     }

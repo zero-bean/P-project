@@ -1,5 +1,7 @@
 package com.gcu.jobshorts;
 
+import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +23,20 @@ public class JobData {
     private String employment_type;
     private String location;
     private String skill;
+
+    public JobData(Map<String, Object> jobMap) {
+        this.company = (String) jobMap.get("company");
+        this.selection1 = (String) jobMap.get("selection1");
+        this.selection1_url = (String) jobMap.get("selection1_url");
+        this.due = (String) jobMap.get("due");
+        this.technique = (String) jobMap.get("technique");
+        this.career_min = (String) jobMap.get("career_min");
+        this.carrer_max = (String) jobMap.get("carrer_max");
+        this.education_level = (String) jobMap.get("education_level");
+        this.employment_type = (String) jobMap.get("employment_type");
+        this.location = (String) jobMap.get("location");
+        this.skill = (String) jobMap.get("skill");
+    }
 
     @Override
     public boolean equals(Object obj) {
