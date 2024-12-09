@@ -59,6 +59,15 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
+//    implementation(platform(libs.firebase.bom))
+//    implementation(libs.google.firebase.auth)
+//    implementation(libs.play.services.auth)
+//    implementation(libs.firebase.database)
+//    implementation(libs.firebase.analytics)
+//
+//    implementation(libs.material.v1130alpha01)
+//
+//    implementation (libs.projectlombok.lombok.v11832)
     implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.android.gms:play-services-auth")

@@ -99,6 +99,7 @@ public class HomeFragment extends Fragment {
                             public void onSuccess(List<JobData> jobList) {
                                 if (!jobList.isEmpty()) {
                                     // 예: RecyclerView에 데이터 표시
+                                    sharedViewModel.setJobDataList(jobList);
                                     Snackbar.make(rootView, "검색 성공! 총 " + jobList.size() + "건", Snackbar.LENGTH_SHORT).show();
                                 } else {
                                     Snackbar.make(rootView, "조건에 맞는 결과가 없습니다.", Snackbar.LENGTH_SHORT).show();
