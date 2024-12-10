@@ -39,8 +39,7 @@ public class FirestoreHelper {
                                         && jobCareerMin <= minExperience
                                         && jobCareerMax >= minExperience
                                         && jobLocation.equals(location)
-                                        && (jobTechnique.contains(jobType)
-                                        || jobType.contains(jobTechnique))) {
+                                        && (containsKeyword(jobTechnique, jobType) || containsKeyword(jobType, jobTechnique))) {
                                     filteredJobs.add(new JobData(job)); // JobData 생성자로 변환
                                 }
                             }
@@ -59,6 +58,18 @@ public class FirestoreHelper {
         void onSuccess(List<JobData> jobList);
 
         void onFailure(Exception e);
+    }
+
+    private boolean containsKeyword(String text, String keyword) {
+        if (text == null || keyword == null) return false;
+
+        String[] words = text.split(" ");
+        for (String word : words) {
+            if (word.contains(keyword)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
