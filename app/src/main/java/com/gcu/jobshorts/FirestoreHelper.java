@@ -39,7 +39,8 @@ public class FirestoreHelper {
                                         && jobCareerMin <= minExperience
                                         && jobCareerMax >= minExperience
                                         && jobLocation.equals(location)
-                                        && jobTechnique.equals(jobType)) {
+                                        && (jobTechnique.contains(jobType)
+                                        || jobType.contains(jobTechnique))) {
                                     filteredJobs.add(new JobData(job)); // JobData 생성자로 변환
                                 }
                             }

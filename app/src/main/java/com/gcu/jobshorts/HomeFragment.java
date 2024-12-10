@@ -32,7 +32,7 @@ public class HomeFragment extends Fragment {
     private Spinner spinnerJob;
     private List<String> educationOptions = Arrays.asList("최종 학력을 선택하세요", "고졸", "초대졸", "대졸", "석사", "박사");
     private List<String> regionOptions = Arrays.asList("희망 근무 지역을 선택하세요", "서울", "부산", "대구", "인천", "광주");
-    private List<String> jobOptions = Arrays.asList("직종을 선택하세요", "소프트웨어", "프론트엔드", "백엔드", "게임", "임베디드", "클라우드", "인공지능", "모바일", "기타");
+    private List<String> jobOptions = Arrays.asList("직종을 선택하세요", "소프트웨어", "프론트엔드", "백엔드 개발", "게임", "임베디드", "클라우드", "인공지능", "모바일", "기타");
 
     private FirebaseAuth mAuth;
 
@@ -99,6 +99,7 @@ public class HomeFragment extends Fragment {
                             public void onSuccess(List<JobData> jobList) {
                                 if (!jobList.isEmpty()) {
                                     // 예: RecyclerView에 데이터 표시
+                                    sharedViewModel.setJobDataList(jobList);
                                     Snackbar.make(rootView, "검색 성공! 총 " + jobList.size() + "건", Snackbar.LENGTH_SHORT).show();
                                 } else {
                                     Snackbar.make(rootView, "조건에 맞는 결과가 없습니다.", Snackbar.LENGTH_SHORT).show();
