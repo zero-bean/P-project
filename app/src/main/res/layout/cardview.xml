@@ -1,5 +1,6 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,6 +8,7 @@
     android:elevation="4dp">
 
     <LinearLayout
+        android:id="@+id/cardFront"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,6 +49,51 @@
             android:layout_height="wrap_content"
             android:text="Location"
             android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cardMiddle"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="--Qualifications--"
+            android:textSize="14sp"/>
+        <TextView
+            android:id="@+id/qualificationsView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ualifications"
+            android:textSize="14sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cardBack"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="--Treat--"
+            android:textSize="14sp"/>
+        <TextView
+            android:id="@+id/treatView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Treat"
+            android:textSize="14sp"/>
+
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

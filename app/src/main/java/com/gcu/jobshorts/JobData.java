@@ -24,6 +24,9 @@ public class JobData {
     private String employment_type;
     private String location;
     private String skill;
+    private String qualifications;
+    private String treat;
+
 
     public JobData(Map<String, Object> jobMap) {
         this.company = (String) jobMap.get("company");
@@ -37,6 +40,8 @@ public class JobData {
         this.employment_type = (String) jobMap.get("employment_type");
         this.location = (String) jobMap.get("location");
         this.skill = (String) jobMap.get("skill");
+        this.qualifications = (String) jobMap.get("qualifications");
+        this.treat = (String) jobMap.get("treat");
     }
 
     // equals 메서드 재정의
@@ -76,6 +81,8 @@ public class JobData {
                 ", employment_type='" + employment_type + '\'' +
                 ", location='" + location + '\'' +
                 ", skill='" + skill + '\'' +
+                ", qualifications='" + location + '\'' +
+                ", treat='" + location + '\'' +
                 '}';
     }
 }
