@@ -7,4 +7,6 @@
     <color name="tertiary">#A98893</color>
     <color name="neutral">#939092</color>
     <color name="neutral_variant">#938F96</color>
+    <color name="purple">#FFBB86FC</color>
+    <color name="green">#44dbb5</color>
 </resources>

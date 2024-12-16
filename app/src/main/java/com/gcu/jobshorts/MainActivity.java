@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if (id == R.id.navigation_bar_item_2) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment[1]).commit();
                 } else if (id == R.id.navigation_bar_item_3) {
-                    //
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment[2]).commit();
                 }
 
                 return true;
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         fragment = new Fragment[3];
         fragment[0] = new HomeFragment();
         fragment[1] = new SearchFragment();
-        fragment[2] = null;
+        fragment[2] = new ChatFragment();
 
         fragmentManager.beginTransaction().add(R.id.fragment_container, fragment[0]).commit();
     }

@@ -78,4 +78,6 @@ dependencies {
 
     implementation ("org.projectlombok:lombok:1.18.32")
     annotationProcessor ("org.projectlombok:lombok:1.18.32")
+
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
 }
