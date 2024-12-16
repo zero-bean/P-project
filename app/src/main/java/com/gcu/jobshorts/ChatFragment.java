@@ -250,7 +250,7 @@ public class ChatFragment extends Fragment {
         RequestBody body = RequestBody.create(object.toString(), JSON);
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/chat/completions") // OpenAI API 경로
-                .header("Authorization", "Bearer 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")
+                .header("Authorization", "Bearer ") //OpenAI API 키 입력해야함!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 .post(body)
                 .build();
 
