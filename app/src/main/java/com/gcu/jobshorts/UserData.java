@@ -17,7 +17,11 @@ public class UserData {
     private String UID;
     @NonNull
     private String userName;
-    private Detail userDetail;
+
+    private String education;
+    private Preference preference;
+    private Specification[] specification;
+    private Career[] career;
 
     @Override
     public boolean equals(Object obj) {
@@ -36,10 +40,28 @@ public class UserData {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class Detail {
-        private String occupation;
-        private String career;
-        private String education;
+    public static class Preference {
+        private String jobType;
+        private String field;
         private String region;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Specification {
+        private String title;
+        private String content;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Career {
+        private String company;
+        private String content;
+        private int period;
     }
 }

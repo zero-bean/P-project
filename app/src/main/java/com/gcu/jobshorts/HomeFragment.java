@@ -8,14 +8,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.snackbar.Snackbar;
+import com.gcu.jobshorts.resume.CareerFragment;
+import com.gcu.jobshorts.resume.SpecificationFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Arrays;
@@ -23,38 +27,53 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
     private SharedViewModel sharedViewModel;
-    private TextView profileNameTextView;
-    private EditText editTextExperience;
-    private Button logoutBtn;
-    private Button decideBtn;
-    private Spinner spinnerEducation;
-    private Spinner spinnerRegion;
-    private Spinner spinnerJob;
-    private List<String> educationOptions = Arrays.asList("최종 학력을 선택하세요", "고졸", "초대졸", "대졸", "석사", "박사");
-    private List<String> regionOptions = Arrays.asList("희망 근무 지역을 선택하세요", "서울", "부산", "대구", "인천", "광주");
-    private List<String> jobOptions = Arrays.asList("직종을 선택하세요", "소프트웨어", "하드웨어", "프론트엔드",
-            "백엔드", "웹", "임베디드", "클라우드", "네트워크", "안드로이드", "IOS", "영업", "마케팅", "ERP");
-
     private FirebaseAuth mAuth;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    private CardView cardEducation, cardCareer, cardSpecification, cardJobRequirement;
+    private Button logoutBtn, decideBtn;
+    private ImageButton careerBtn, specBtn;
+    private EditText etextRegion;
+    private Spinner spinnerEducation, spinnerJobType, spinnerField;
+    private List<String> educationOptions;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // 스피너 초기화
-        initializeSpinners(rootView);
+        //  초기화 //  //  //  //  //  //  //  //
+        cardEducation = rootView.findViewById(R.id.card_education);
+        cardCareer = rootView.findViewById(R.id.card_career);
+        cardSpecification = rootView.findViewById(R.id.card_specification);
+        cardJobRequirement = rootView.findViewById(R.id.card_requirement);
 
-        // UI 요소 초기화
-        profileNameTextView = rootView.findViewById(R.id.textview_username);
-        editTextExperience = rootView.findViewById(R.id.edittext_experience);
-        logoutBtn = rootView.findViewById(R.id.logoutButton);
-        decideBtn = rootView.findViewById(R.id.button_saveNsearch);
+        logoutBtn = rootView.findViewById(R.id.button_logout);
+        careerBtn = rootView.findViewById(R.id.button_add_career);
+        decideBtn = rootView.findViewById(R.id.button_getsolution);
+        specBtn = rootView.findViewById(R.id.button_add_specification);
+
+        etextRegion = rootView.findViewById(R.id.edittext_location);
+
+        spinnerEducation = rootView.findViewById(R.id.spinner_education);
+        spinnerJobType = rootView.findViewById(R.id.spinner_employment_type);
+        spinnerField = rootView.findViewById(R.id.spinner_field);
+        //  //  //  //  //  //  //  //  //  //
+
+        educationOptions = Arrays.asList(
+                "선택하기",
+                "고등학교",
+                "대학교(2,3년)",
+                "대학교(4년)",
+                "대학원"
+        );
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                educationOptions
+        );
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerEducation.setAdapter(adapter);
 
         // ViewModel 연결
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
@@ -69,13 +88,12 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // 로그아웃 버튼 리스너
-        logoutBtn.setOnClickListener(v -> {
-            logout();
-        });
-
+        // 리스너
+        careerBtn.setOnClickListener(v -> navigateToFragment(new CareerFragment()));
+        specBtn.setOnClickListener(v -> navigateToFragment(new SpecificationFragment()));
+        logoutBtn.setOnClickListener(v -> logout());
         // 결정 및 검색 버튼 리스너
-        decideBtn.setOnClickListener(v -> {
+        /* decideBtn.setOnClickListener(v -> {
             String selectedEducation = spinnerEducation.getSelectedItem().toString();
             String selectedRegion = spinnerRegion.getSelectedItem().toString();
             String experienceInput = editTextExperience.getText().toString();
@@ -113,35 +131,21 @@ public class HomeFragment extends Fragment {
                             }
                         });
             }
-        });
-
-
+        }); */
 
         return rootView;
     }
 
-    private void initializeSpinners(View rootView) {
-        // 스피너 변수 초기화
-        spinnerEducation = rootView.findViewById(R.id.spinner_education);
-        spinnerRegion = rootView.findViewById(R.id.spinner_region);
-        spinnerJob = rootView.findViewById(R.id.spinner_job);
-
-        // Adapter 설정
-        ArrayAdapter<String> educationAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, educationOptions);
-        ArrayAdapter<String> regionAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, regionOptions);
-        ArrayAdapter<String> jobAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, jobOptions);
-
-        spinnerEducation.setAdapter(educationAdapter);
-        spinnerRegion.setAdapter(regionAdapter);
-        spinnerJob.setAdapter(jobAdapter);
+    // 프래그먼트로 이동하는 함수
+    private void navigateToFragment(Fragment fragment) {
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment); // 기존 프래그먼트를 새로운 프래그먼트로 교체
+        transaction.addToBackStack(null);  // 뒤로가기 가능하게 설정
+        transaction.commit();
     }
 
-    // 사용자 프로필 업데이트
-    private void updateUserProfile(UserData userData) {
-        profileNameTextView.setText(userData.getUserName());
-    }
-
-    private void sendUserDataToModel(String experienceInput) {
+    // 레거시 코드
+    /* private void sendUserDataToModel(String experienceInput) {
         int selectedEducationIndex = spinnerEducation.getSelectedItemPosition();
         String selectedRegion = spinnerRegion.getSelectedItem().toString();
         String selectedJob = spinnerJob.getSelectedItem().toString();
@@ -163,6 +167,10 @@ public class HomeFragment extends Fragment {
             // 예외 처리
             Snackbar.make(requireView(), "사용자 데이터를 불러오지 못했습니다.", Snackbar.LENGTH_SHORT).show();
         }
+    } */
+
+    private void updateUserProfile(UserData userData) {
+        // 여기에 모든 항목 불러오기 추가!
     }
 
     // 로그아웃

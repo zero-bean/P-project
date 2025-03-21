@@ -6,6 +6,37 @@
     <string name="text_label_2">Search</string>
     <string name="text_label_3">Chat</string>
 
+    <string-array name="education_options">
+        <item>선택하기</item>
+        <item>고등학교</item>
+        <item>대학교(2, 3년)</item>
+        <item>대학교(4년)</item>
+        <item>대학원</item>
+    </string-array>
+
+    <string-array name="employment_types">
+        <item>선택하기</item>
+        <item>정규직</item>
+        <item>계약직</item>
+        <item>인턴</item>
+    </string-array>
+
+    <!-- 분야 배열 -->
+    <string-array name="fields">
+        <item>선택하기</item>
+        <item>AI</item>
+        <item>게임</item>
+        <item>소프트웨어</item>
+        <item>임베디드</item>
+        <item>웹</item>
+        <item>클라우드</item>
+        <item>하드웨어</item>
+        <item>네트워크</item>
+        <item>백엔드</item>
+        <item>안드로이드</item>
+        <item>IOS</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

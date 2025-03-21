@@ -2,11 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="primary">#584D7F</color>
-    <color name="secondary">#9e78ff</color>
-    <color name="tertiary">#A98893</color>
-    <color name="neutral">#939092</color>
-    <color name="neutral_variant">#938F96</color>
+    <color name="basic">#EDE0D4</color>
+    <color name="primary">#E6CCB2</color>
+    <color name="secondary">#DDB892</color>
+    <color name="tertiary">#B08968</color>
+    <color name="neutral">#7F5539</color>
+    <color name="neutral_variant">#9C6644</color>
     <color name="purple">#FFBB86FC</color>
     <color name="green">#44dbb5</color>
 </resources>

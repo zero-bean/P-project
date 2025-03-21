@@ -1,118 +1,355 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/homeFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/box_background_squared"
+    android:background="@color/basic"
     tools:context=".HomeFragment">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:weightSum="4">
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button_getsolution">
 
-        <!-- 구역 1: 이름과 로그아웃 버튼 -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="16dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:focusableInTouchMode="false"
+            android:focusable="false"
+            android:padding="16dp"
+            android:gravity="center_horizontal">
 
-            <TextView
-                android:id="@+id/textview_username"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="2"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/spinner_background_rounded"
-                android:gravity="center"
-                android:text="이름"
-                android:textColor="@color/neutral"
-                android:textSize="16sp" />
-
-            <Button
-                android:id="@+id/logoutButton"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/button_background_rounded"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="로그아웃"
-                android:textColor="@color/neutral"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <!-- 구역 2: 입력 스피너 칸 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <Spinner
-                android:id="@+id/spinner_education"
-                android:background="@drawable/spinner_background_rounded"
-                android:textColor="@color/neutral"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="12dp"
-                android:spinnerMode="dropdown" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            <Spinner
-                android:id="@+id/spinner_region"
-                android:background="@drawable/spinner_background_rounded"
-                android:textColor="@color/neutral"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="당신의 이력서를 작성하세요"
+                    android:textColor="@color/tertiary"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/button_logout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="로그아웃"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/secondary"
+                    android:backgroundTint="@color/neutral"
+                    android:layout_marginStart="16dp" />
+            </LinearLayout>
+
+            <!-- 카드 2: Education -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_education"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="12dp"
-                android:spinnerMode="dropdown" />
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/neutral" >
 
-            <EditText
-                android:id="@+id/edittext_experience"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- 제목 -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="학력"
+                        android:textColor="@color/secondary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <!-- 구분선 -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray"
+                        android:layout_marginHorizontal="16dp" />
+
+                    <!-- 스피너 -->
+                    <Spinner
+                        android:id="@+id/spinner_education"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:entries="@array/education_options"
+                        android:spinnerMode="dropdown" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_career"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="12dp"
-                android:background="@drawable/spinner_background_rounded"
-                android:hint="경력 연차를 입력하세요"
-                android:inputType="number"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:paddingStart="8dp" />
+                app:cardBackgroundColor="@color/neutral"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="8dp">
 
-            <Spinner
-                android:id="@+id/spinner_job"
-                android:background="@drawable/spinner_background_rounded"
-                android:textColor="@color/neutral"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:spinnerMode="dropdown" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- 헤더: 경력 + 추가 버튼 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="경력"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/secondary"/>
+
+                        <!-- + 버튼 -->
+                        <ImageButton
+                            android:id="@+id/button_add_career"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/baseline_add_24"
+                            android:contentDescription="Add Career"
+                            app:tint="@color/secondary" />
+
+                    </LinearLayout>
+
+                    <!-- 구분선 -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray"
+                        android:layout_marginHorizontal="16dp" />
+
+                    <!-- 본문: 경력 리스트 -->
+                    <LinearLayout
+                        android:id="@+id/layout_career_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <!-- 여기에 추가되는 경력 항목들이 동적으로 들어올 예정 -->
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <!-- 카드 4: Specification -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_specification"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="12dp"
+                app:cardBackgroundColor="@color/neutral"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- 상단 제목 + 추가 버튼 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="스펙"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/secondary"/>
+
+                        <ImageButton
+                            android:id="@+id/button_add_specification"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/baseline_add_24"
+                            android:contentDescription="Add Specification"
+                            app:tint="@color/secondary" />
+                    </LinearLayout>
+
+                    <!-- 구분선 -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray"
+                        android:layout_marginHorizontal="16dp" />
+
+                    <!-- 스펙 리스트 -->
+                    <LinearLayout
+                        android:id="@+id/spec_list_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <!-- 동적으로 추가될 TextView들이 여기에 들어감 -->
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <!-- 카드 6: Job Requirement -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_requirement"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="12dp"
+                android:focusable="false"
+                android:clickable="false"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/neutral">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- 제목 -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="희망 근무 조건"
+                        android:textColor="@color/secondary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <!-- 구분선 -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray"
+                        android:layout_marginHorizontal="16dp" />
+
+                    <!-- 고용 형태 (Spinner) -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="고용 형태"
+                        android:textColor="@color/secondary"
+                        android:textSize="14sp" />
+
+                    <Spinner
+                        android:id="@+id/spinner_employment_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:entries="@array/employment_types" />
+
+                    <!-- 분야 (Spinner) -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="분야"
+                        android:textColor="@color/secondary"
+                        android:textSize="14sp" />
+
+                    <Spinner
+                        android:id="@+id/spinner_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:entries="@array/fields" />
+
+                    <!-- 지역 (Button) -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="지역"
+                        android:textColor="@color/secondary"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/edittext_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:hint="입력하세요"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:inputType="none"
+                        android:textColor="@color/white"
+                        android:background="@color/neutral" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-        <!-- 구역 3: 버튼 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
+    <!-- 버튼: 화면의 하단에 고정 -->
+    <Button
+        android:id="@+id/button_getsolution"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:text="검색"
+        android:textColor="@color/secondary"
+        android:backgroundTint="@color/neutral"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
 
-            <Button
-                android:id="@+id/button_saveNsearch"
-                android:layout_width="319dp"
-                android:layout_height="66dp"
-                android:background="@drawable/button_background_rounded"
-                android:text="저장 및 채용 정보 확인"
-                android:textColor="@color/neutral"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </LinearLayout>
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
