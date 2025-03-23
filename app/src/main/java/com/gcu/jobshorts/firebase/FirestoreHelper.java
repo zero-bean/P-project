@@ -1,5 +1,8 @@
-package com.gcu.jobshorts;
+package com.gcu.jobshorts.firebase;
 
+import android.util.Log;
+
+import com.gcu.jobshorts.data.JobData;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -38,8 +41,8 @@ public class FirestoreHelper {
                                 if (jobEducation <= educationLevel
                                         && jobCareerMin <= minExperience
                                         && jobCareerMax >= minExperience
-                                        && jobLocation.equals(location)
-                                        && (containsKeyword(jobTechnique, jobType) || containsKeyword(jobType, jobTechnique))) {
+                                        && jobLocation.contains(location)
+                                        && containsKeyword(jobTechnique, jobType)) {
                                     filteredJobs.add(new JobData(job)); // JobData 생성자로 변환
                                 }
                             }
@@ -63,13 +66,7 @@ public class FirestoreHelper {
     private boolean containsKeyword(String text, String keyword) {
         if (text == null || keyword == null) return false;
 
-        String[] words = text.split(" ");
-        for (String word : words) {
-            if (word.contains(keyword)) {
-                return true;
-            }
-        }
-        return false;
+        return text.contains(keyword);
     }
 }
 

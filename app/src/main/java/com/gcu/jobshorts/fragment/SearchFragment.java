@@ -1,4 +1,4 @@
-package com.gcu.jobshorts;
+package com.gcu.jobshorts.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -12,6 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.gcu.jobshorts.R;
+import com.gcu.jobshorts.firebase.SharedViewModel;
+import com.gcu.jobshorts.adapter.CardViewAdapter;
+import com.gcu.jobshorts.data.JobData;
 
 import java.util.ArrayList;
 import java.util.List;

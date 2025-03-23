@@ -1,4 +1,4 @@
-package com.gcu.jobshorts;
+package com.gcu.jobshorts.data;
 
 import java.util.Map;
 import java.util.Objects;

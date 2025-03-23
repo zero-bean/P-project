@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/basic"
-    tools:context=".HomeFragment">
+    tools:context=".fragment.HomeFragment">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
@@ -158,13 +158,10 @@
                         android:layout_marginHorizontal="16dp" />
 
                     <!-- 본문: 경력 리스트 -->
-                    <LinearLayout
-                        android:id="@+id/layout_career_list"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerview_career"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <!-- 여기에 추가되는 경력 항목들이 동적으로 들어올 예정 -->
-                    </LinearLayout>
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -186,7 +183,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <!-- 상단 제목 + 추가 버튼 -->
                     <LinearLayout
@@ -223,15 +221,10 @@
                         android:layout_marginHorizontal="16dp" />
 
                     <!-- 스펙 리스트 -->
-                    <LinearLayout
-                        android:id="@+id/spec_list_container"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerview_specification"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <!-- 동적으로 추가될 TextView들이 여기에 들어감 -->
-                    </LinearLayout>
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

@@ -1,16 +1,13 @@
-package com.gcu.jobshorts;
+package com.gcu.jobshorts.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -20,6 +17,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.gcu.jobshorts.Message;
+import com.gcu.jobshorts.R;
+import com.gcu.jobshorts.firebase.SharedViewModel;
+import com.gcu.jobshorts.adapter.MessageAdapter;
+import com.gcu.jobshorts.data.JobData;
 
 import java.util.ArrayList;
 import java.util.List;

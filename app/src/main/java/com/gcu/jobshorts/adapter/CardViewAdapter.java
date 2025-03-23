@@ -1,4 +1,4 @@
-package com.gcu.jobshorts;
+package com.gcu.jobshorts.adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -10,6 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.gcu.jobshorts.R;
+import com.gcu.jobshorts.data.JobData;
 
 import java.util.List;
 

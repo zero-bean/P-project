@@ -1,4 +1,4 @@
-package com.gcu.jobshorts;
+package com.gcu.jobshorts.activity;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -9,6 +9,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.gcu.jobshorts.R;
+import com.gcu.jobshorts.firebase.SharedViewModel;
+import com.gcu.jobshorts.fragment.ChatFragment;
+import com.gcu.jobshorts.fragment.HomeFragment;
+import com.gcu.jobshorts.fragment.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
