@@ -1,99 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    android:elevation="4dp">
+    android:layout_margin="12dp"
+    android:elevation="6dp"
+    app:cardCornerRadius="16dp"
+    app:cardBackgroundColor="#FAFAFA"
+    android:clickable="true"
+    android:focusable="true">
 
     <LinearLayout
-        android:id="@+id/cardFront"
+        android:id="@+id/cardContentLayout"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="20dp"
+        android:background="@android:color/white">
 
+        <!-- 회사명 -->
         <TextView
             android:id="@+id/companyTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Company"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#212121" />
 
+        <!-- 포지션 -->
         <TextView
             android:id="@+id/selectionTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Position"
-            android:textSize="14sp" />
+            android:textSize="15sp"
+            android:textColor="#424242"
+            android:layout_marginTop="4dp" />
 
+        <!-- 마감일 -->
         <TextView
             android:id="@+id/dueTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Due Date"
-            android:textSize="14sp" />
+            android:textSize="15sp"
+            android:textColor="#424242"
+            android:layout_marginTop="2dp" />
 
+        <!-- 기술 -->
         <TextView
             android:id="@+id/techniqueTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Technique"
-            android:textSize="14sp" />
+            android:textSize="15sp"
+            android:textColor="#424242"
+            android:layout_marginTop="2dp" />
 
+        <!-- 지역 -->
         <TextView
             android:id="@+id/locationTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Location"
-            android:textSize="14sp" />
+            android:textSize="15sp"
+            android:textColor="#424242"
+            android:layout_marginTop="2dp" />
 
-    </LinearLayout>
+        <!-- 구분선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DDDDDD"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp" />
 
-    <LinearLayout
-        android:id="@+id/cardMiddle"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:visibility="gone">
-
+        <!-- 자격요건 섹션 -->
         <TextView
+            android:id="@+id/qualificationsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="--Qualifications--"
-            android:textSize="14sp"/>
+            android:text="Qualifications"
+            android:textStyle="bold"
+            android:textColor="#FF5722"
+            android:visibility="gone"
+            android:textSize="15sp"
+            android:layout_marginBottom="2dp" />
+
         <TextView
             android:id="@+id/qualificationsView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ualifications"
-            android:textSize="14sp"/>
+            android:text="Qualifications content here"
+            android:textSize="14sp"
+            android:textColor="#616161"
+            android:visibility="gone" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/cardBack"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:visibility="gone">
-
+        <!-- 대우 섹션 -->
         <TextView
+            android:id="@+id/treatTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="--Treat--"
-            android:textSize="14sp"/>
+            android:text="Treat"
+            android:textStyle="bold"
+            android:textColor="#03A9F4"
+            android:visibility="gone"
+            android:textSize="15sp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="2dp" />
+
         <TextView
             android:id="@+id/treatView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Treat"
-            android:textSize="14sp"/>
-
+            android:text="Treat content here"
+            android:textSize="14sp"
+            android:textColor="#616161"
+            android:visibility="gone" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

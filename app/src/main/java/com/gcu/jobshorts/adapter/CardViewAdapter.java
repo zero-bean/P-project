@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,61 +33,63 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.CardVi
 
     // ViewHolder 클래스
     public static class CardViewHolder extends RecyclerView.ViewHolder {
-        TextView companyTextView, selectionTextView, dueTextView, techniqueTextView, locationTextView, qualificationsView, treatView;
+        TextView companyTextView, selectionTextView, dueTextView, techniqueTextView, locationTextView;
+        TextView qualificationsTitle, qualificationsView, treatTitle, treatView;
         CardView cardView;
+        LinearLayout cardContentLayout;
 
-        View cardFront, cardMiddle, cardBack; // 3개 카드뷰 추가
-        int isFrontVisible = 1; // 초기 상태
+        boolean isExpanded = false;
 
         public CardViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            // 레이아웃 내부의 뷰 연결
             cardView = itemView.findViewById(R.id.cardView);
-            cardFront = itemView.findViewById(R.id.cardFront);
-            cardMiddle = itemView.findViewById(R.id.cardMiddle);
-            cardBack = itemView.findViewById(R.id.cardBack);
+            cardContentLayout = itemView.findViewById(R.id.cardContentLayout);
 
             companyTextView = itemView.findViewById(R.id.companyTextView);
             selectionTextView = itemView.findViewById(R.id.selectionTextView);
             dueTextView = itemView.findViewById(R.id.dueTextView);
             techniqueTextView = itemView.findViewById(R.id.techniqueTextView);
             locationTextView = itemView.findViewById(R.id.locationTextView);
+
+            qualificationsTitle = itemView.findViewById(R.id.qualificationsTitle);
             qualificationsView = itemView.findViewById(R.id.qualificationsView);
+            treatTitle = itemView.findViewById(R.id.treatTitle);
             treatView = itemView.findViewById(R.id.treatView);
         }
 
-        public void flipCard() {
-            if (isFrontVisible == 1) {
-                animateFlip(cardFront, cardMiddle);
-            } else if (isFrontVisible == 2) {
-                animateFlip(cardMiddle, cardBack);
-            } else if (isFrontVisible == 3) {
-                animateFlip(cardBack, cardFront);
+        public void toggleExpand() {
+            if (isExpanded) {
+                // 축소
+                qualificationsTitle.setVisibility(View.GONE);
+                qualificationsView.setVisibility(View.GONE);
+                treatTitle.setVisibility(View.GONE);
+                treatView.setVisibility(View.GONE);
+
+                cardView.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .setDuration(300)
+                        .start();
+
+            } else {
+                // 확대 + 상세 정보 보여주기
+                qualificationsTitle.setVisibility(View.VISIBLE);
+                qualificationsView.setVisibility(View.VISIBLE);
+                treatTitle.setVisibility(View.VISIBLE);
+                treatView.setVisibility(View.VISIBLE);
+
+                cardView.animate()
+                        .scaleX(1.05f)
+                        .scaleY(1.05f)
+                        .setDuration(300)
+                        .start();
             }
 
-            // 상태 업데이트
-            isFrontVisible++;
-            if (isFrontVisible == 4) {
-                isFrontVisible = 1;
-            }
-        }
-
-        private void animateFlip(View currentView, View nextView) {
-            currentView.animate()
-                    .rotationY(90f) // 현재 뷰를 90도 회전
-                    .setDuration(1000) // 애니메이션 시간 설정
-                    .withEndAction(() -> {
-                        currentView.setVisibility(View.GONE); // 현재 뷰 숨기기
-                        nextView.setVisibility(View.VISIBLE); // 다음 뷰 표시
-                        nextView.setRotationY(90f); // 다음 뷰 초기 상태 설정
-                        nextView.animate()
-                                .rotationY(0f) // 다음 뷰를 0도로 회전
-                                .setDuration(1000) // 애니메이션 시간 설정
-                                .start(); // 애니메이션 시작
-                    }).start(); // 애니메이션 시작
+            isExpanded = !isExpanded;
         }
     }
+
 
     @NonNull
     @Override
@@ -98,10 +101,8 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.CardVi
 
     @Override
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
-        // 현재 position에 해당하는 JobData 가져오기
         JobData currentJob = jobDataList.get(position);
 
-        // 데이터를 뷰에 바인딩
         holder.companyTextView.setText(currentJob.getCompany());
         holder.selectionTextView.setText(currentJob.getSelection1());
         holder.dueTextView.setText(currentJob.getDue());
@@ -109,10 +110,18 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.CardVi
         holder.locationTextView.setText(currentJob.getLocation());
         holder.qualificationsView.setText(currentJob.getQualifications());
         holder.treatView.setText(currentJob.getTreat());
-        // 필요에 따라 추가 데이터 바인딩
 
-        holder.cardView.setOnClickListener(v -> holder.flipCard());
+        holder.cardView.setScaleX(1f);
+        holder.cardView.setScaleY(1f);
+        holder.qualificationsTitle.setVisibility(View.GONE);
+        holder.qualificationsView.setVisibility(View.GONE);
+        holder.treatTitle.setVisibility(View.GONE);
+        holder.treatView.setVisibility(View.GONE);
+        holder.isExpanded = false;
+
+        holder.cardView.setOnClickListener(v -> holder.toggleExpand());
     }
+
 
     @Override
     public int getItemCount() {
