@@ -4,7 +4,13 @@
     <!-- bottom_navigation_menu.xml에 사용되는 item의 title 속성 -->
     <string name="text_label_1">Home</string>
     <string name="text_label_2">Search</string>
-    <string name="text_label_3">Chat</string>
+    <string name="text_label_3">Result</string>
+    <string name="text_label_4">Chat</string>
+
+    <string name="tab_label_1">TAB 1</string>
+    <string name="tab_label_2">TAB 2</string>
+    <string name="tab_label_3">TAB 3</string>
+    <string name="tab_label_4">TAB 4</string>
 
     <string-array name="education_options">
         <item>선택하기</item>
