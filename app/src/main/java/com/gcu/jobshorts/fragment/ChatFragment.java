@@ -115,6 +115,8 @@ public class ChatFragment extends Fragment {
     }
 
     private void showCompanySelectionDialog() {
+        if (!isVisible()) return; // <--- 이거 추가함 <박영빈>
+
         // RadioGroup을 포함한 Dialog 생성
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("회사 선택");
