@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.gcu.jobshorts.data.JobData;
+import com.gcu.jobshorts.data.company.CompanyData;
 import com.gcu.jobshorts.data.user.UserData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,7 +25,8 @@ public class SharedViewModel extends ViewModel {
 
     private final MutableLiveData<UserData> userData = new MutableLiveData<>();
     private final MutableLiveData<List<JobData>> jobDataList = new MutableLiveData<>();
-
+    private final MutableLiveData<List<CompanyData>> companyDataList = new MutableLiveData<>();
+    private final MutableLiveData<CompanyData> selectedCompany = new MutableLiveData<>();
     private final DatabaseReference userRef;
     private FirebaseUser currentUser;
 
@@ -68,6 +70,18 @@ public class SharedViewModel extends ViewModel {
 
     public LiveData<List<JobData>> getJobDataList() {
         return jobDataList;
+    }
+
+    public void setCompanyDataList(List<CompanyData> companyList) { companyDataList.setValue(companyList); }
+    public LiveData<List<CompanyData>> getCompanyDataList() {
+        return companyDataList;
+    }
+
+    public void setSelectedCompany(CompanyData company) {
+        selectedCompany.setValue(company);
+    }
+    public LiveData<CompanyData> getSelectedCompany() {
+        return selectedCompany;
     }
 
     private void fetchUserData() {

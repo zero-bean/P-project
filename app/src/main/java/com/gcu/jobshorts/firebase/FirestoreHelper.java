@@ -3,6 +3,7 @@ package com.gcu.jobshorts.firebase;
 import android.util.Log;
 
 import com.gcu.jobshorts.data.JobData;
+import com.gcu.jobshorts.data.company.CompanyData;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -12,9 +13,39 @@ import java.util.Map;
 
 public class FirestoreHelper {
     private final FirebaseFirestore firestore;
-
     public FirestoreHelper() {
         firestore = FirebaseFirestore.getInstance();
+    }
+
+    public void fetchCompanyData(FetchCompanyCallback callback) {
+        firestore.collection("results").document("AwhRmPhWlwIAjkSMqrhm")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        DocumentSnapshot document = task.getResult();
+                        Map<String, Object> dataMap = document.getData();
+
+                        List<CompanyData> companyList = new ArrayList<>();
+                        if (dataMap != null) {
+                            for (Map.Entry<String, Object> entry : dataMap.entrySet()) {
+                                Object value = entry.getValue();
+                                if (value instanceof Map) {
+                                    try {
+                                        @SuppressWarnings("unchecked")
+                                        Map<String, Object> companyDataMap = (Map<String, Object>) value;
+                                        companyList.add(new CompanyData(companyDataMap));
+                                    } catch (Exception e) {
+                                        e.printStackTrace(); // 혹은 Timber 등으로 로깅
+                                    }
+                                }
+                            }
+                        }
+
+                        callback.onSuccess(companyList);
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
     }
 
     // 조건에 맞는 데이터를 검색
@@ -60,6 +91,11 @@ public class FirestoreHelper {
     public interface FirestoreCallback {
         void onSuccess(List<JobData> jobList);
 
+        void onFailure(Exception e);
+    }
+
+    public interface FetchCompanyCallback {
+        void onSuccess(List<CompanyData> companyData);
         void onFailure(Exception e);
     }
 
