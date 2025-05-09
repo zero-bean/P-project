@@ -10,4 +10,8 @@
     <color name="neutral_variant">#9C6644</color>
     <color name="purple">#FFBB86FC</color>
     <color name="green">#44dbb5</color>
+    <color name="primaryTextColor">#333333</color>
+    <color name="secondaryTextColor">#888888</color>
+    <color name="cardBackground">#F5F5F5</color>
+    <color name="backgroundColor">#FFFFFF</color>
 </resources>
