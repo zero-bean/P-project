@@ -69,4 +69,6 @@ dependencies {
 
     // OkHttp
     implementation(libs.okhttp)
+
+    implementation (libs.mpandroidchart)
 }

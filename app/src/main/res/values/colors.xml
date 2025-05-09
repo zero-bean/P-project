@@ -14,4 +14,7 @@
     <color name="secondaryTextColor">#888888</color>
     <color name="cardBackground">#F5F5F5</color>
     <color name="backgroundColor">#FFFFFF</color>
+    <color name="gray">#555555</color>
+    <color name="red">#ff0000</color>
+    <color name="lightGray">#888888</color>
 </resources>
