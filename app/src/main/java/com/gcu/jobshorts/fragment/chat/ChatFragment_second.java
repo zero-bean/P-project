@@ -13,17 +13,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gcu.jobshorts.Message;
 import com.gcu.jobshorts.R;
 import com.gcu.jobshorts.adapter.MessageAdapter;
-import com.gcu.jobshorts.Message;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -33,7 +32,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class ChatFragment_first extends Fragment {
+public class ChatFragment_second extends Fragment {
     private RecyclerView recyclerView;
     private TextView welcomeTextView;
     private EditText messageEditText;
@@ -45,7 +44,7 @@ public class ChatFragment_first extends Fragment {
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     OkHttpClient client = new OkHttpClient();
 
-    public ChatFragment_first() {}
+    public ChatFragment_second() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,8 +57,11 @@ public class ChatFragment_first extends Fragment {
 
         messageList = new ArrayList<>();
         messageAdapter = new MessageAdapter(messageList);
+
         recyclerView.setAdapter(messageAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(layoutManager);
 
         sendButton.setOnClickListener(v -> handleSendMessage());
 
@@ -97,6 +99,7 @@ public class ChatFragment_first extends Fragment {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("question", question);
+            jsonObject.put("mode", "job");
         } catch (JSONException e) {
             e.printStackTrace();
             return;
@@ -104,7 +107,7 @@ public class ChatFragment_first extends Fragment {
 
         RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
         Request request = new Request.Builder()
-                .url("http://192.168.0.25:5000/ask")  // ⭐ 서버 URL 입력
+                .url("http://10.0.2.2:5000/ask")  // ⭐ 서버 URL 입력
                 .post(body)
                 .build();
 

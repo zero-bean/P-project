@@ -33,7 +33,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class ChatFragment extends Fragment {
+public class ChatFragment_first extends Fragment {
     private RecyclerView recyclerView;
     private TextView welcomeTextView;
     private EditText messageEditText;
@@ -45,7 +45,7 @@ public class ChatFragment extends Fragment {
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     OkHttpClient client = new OkHttpClient();
 
-    public ChatFragment() {}
+    public ChatFragment_first() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,10 +58,15 @@ public class ChatFragment extends Fragment {
 
         messageList = new ArrayList<>();
         messageAdapter = new MessageAdapter(messageList);
+
         recyclerView.setAdapter(messageAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(layoutManager);
 
         sendButton.setOnClickListener(v -> handleSendMessage());
+
+        addToChat("궁금한 회사에 대해 질문해주세요!", Message.SENT_BY_BOT);
 
         return rootView;
     }
@@ -97,6 +102,7 @@ public class ChatFragment extends Fragment {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("question", question);
+            jsonObject.put("mode", "company");
         } catch (JSONException e) {
             e.printStackTrace();
             return;
@@ -104,7 +110,7 @@ public class ChatFragment extends Fragment {
 
         RequestBody body = RequestBody.create(jsonObject.toString(), JSON);
         Request request = new Request.Builder()
-                .url("http://192.168.0.25:5000/ask")  // ⭐ 서버 URL 입력
+                .url("http://10.0.2.2:5000/ask")  // ⭐ 서버 URL 입력
                 .post(body)
                 .build();
 
