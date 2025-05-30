@@ -1,8 +1,11 @@
 package com.gcu.jobshorts.fragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,13 +17,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.cardview.widget.CardView;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,17 +41,27 @@ import com.gcu.jobshorts.data.user.UserData;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.tom_roush.pdfbox.android.PDFBoxResourceLoader;
+import com.tom_roush.pdfbox.pdmodel.PDDocument;
+import com.tom_roush.pdfbox.text.PDFTextStripper;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class HomeFragment extends Fragment {
+    private ActivityResultLauncher<Intent> pdfPickerLauncher;
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private SharedViewModel sharedViewModel;
     private FirebaseAuth mAuth;
-    private CardView cardEducation, cardCareer, cardSpecification, cardJobRequirement;
-    private Button logoutBtn, decideBtn;
+    private Button logoutBtn, decideBtn, pdfSelectBtn;
     private ImageButton careerBtn, specBtn;
     private EditText etextRegion;
     private Spinner spinnerEducation, spinnerJobType, spinnerField;
@@ -66,6 +78,8 @@ public class HomeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         //  초기화 //  //  //  //  //  //  //  //
+        PDFBoxResourceLoader.init(requireContext());
+
         careerLayoutManager = new LinearLayoutManager(requireContext());
         specLayoutManager = new LinearLayoutManager(requireContext());
 
@@ -77,15 +91,11 @@ public class HomeFragment extends Fragment {
         careerRecyclerView = rootView.findViewById(R.id.recyclerview_career);
         specRecyclerView = rootView.findViewById(R.id.recyclerview_specification);
 
-        cardEducation = rootView.findViewById(R.id.card_education);
-        cardCareer = rootView.findViewById(R.id.card_career);
-        cardSpecification = rootView.findViewById(R.id.card_specification);
-        cardJobRequirement = rootView.findViewById(R.id.card_requirement);
-
         logoutBtn = rootView.findViewById(R.id.button_logout);
         careerBtn = rootView.findViewById(R.id.button_add_career);
         decideBtn = rootView.findViewById(R.id.button_getsolution);
         specBtn = rootView.findViewById(R.id.button_add_specification);
+        pdfSelectBtn = rootView.findViewById(R.id.button_upload_pdf);
 
         etextRegion = rootView.findViewById(R.id.edittext_location);
 
@@ -111,6 +121,13 @@ public class HomeFragment extends Fragment {
             if (userData != null) {
                 updateUserProfile(userData);
             }
+        });
+
+        Button selectPdfButton = rootView.findViewById(R.id.button_upload_pdf);
+        selectPdfButton.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.setType("application/pdf");
+            pdfPickerLauncher.launch(intent);
         });
 
         // 리스너  //  //  //  //  //  //  //  //  //  //  //
@@ -247,7 +264,241 @@ public class HomeFragment extends Fragment {
         logoutBtn.setOnClickListener(v -> logout());
         //  //  //  //  //  //  //  //  //  //  //  //  //  //  //
 
+        // PDF 피커 런처 초기화
+        pdfPickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        Uri pdfUri = result.getData().getData();
+                        if (pdfUri != null) {
+                            processPdfResume(pdfUri);
+                        }
+                    } else {
+                        Toast.makeText(requireContext(), "PDF 파일 선택이 취소되었습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        // PDF 선택 버튼 클릭 리스너 설정
+        pdfSelectBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.setType("application/pdf");
+            pdfPickerLauncher.launch(intent);
+        });
+
         return rootView;
+    }
+
+    private void processPdfResume(Uri pdfUri) {
+        Toast.makeText(requireContext(), "PDF 파일을 분석 중입니다...", Toast.LENGTH_LONG).show();
+        executorService.execute(() -> {
+            try (ParcelFileDescriptor pfd = requireContext().getContentResolver().openFileDescriptor(pdfUri, "r")) {
+                assert pfd != null;
+                try (InputStream inputStream = new FileInputStream(pfd.getFileDescriptor());
+                     PDDocument document = PDDocument.load(inputStream)) {
+
+                    PDFTextStripper pdfStripper = new PDFTextStripper();
+                    String pdfText = pdfStripper.getText(document);
+                    Log.d("PDF_CONTENT", "추출된 PDF 텍스트:\n" + pdfText);
+
+                    // 파싱된 데이터를 위한 임시 변수
+                    String parsedEducation = "";
+                    List<Career> parsedCareers = new ArrayList<>();
+                    List<Specification> parsedSpecifications = new ArrayList<>();
+
+                    // --- 1. 학력 추출 (최종 학력) ---
+                    parsedEducation = extractEducation(pdfText);
+
+                    // --- 2. 경력 추출 ---
+                    parsedCareers = extractCareers(pdfText);
+
+                    // --- 3. 스펙 추출 (대외활동, 봉사활동, 자격증, 외국어, 자기소개서) ---
+                    parsedSpecifications = extractSpecifications(pdfText);
+
+                    // UserData 객체 및 UI를 메인 스레드에서 업데이트
+                    String finalParsedEducation = parsedEducation;
+                    List<Career> finalParsedCareers = parsedCareers;
+                    List<Specification> finalParsedSpecifications = parsedSpecifications;
+                    requireActivity().runOnUiThread(() -> {
+                        UserData currentUserData = sharedViewModel.getUserData().getValue();
+                        if (currentUserData == null) {
+                            // UserData가 아직 로드되지 않은 경우, 새로 생성 (최소한의 정보로)
+                            String uid = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getUid() : null;
+                            String userName = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getDisplayName() : "새 사용자";
+                            currentUserData = new UserData(uid, userName, new UserData.UserInfo(null, new ArrayList<>(), new ArrayList<>(), null));
+                        }
+
+                        UserData.UserInfo userInfo = currentUserData.getUserInfo();
+                        if (userInfo == null) {
+                            userInfo = new UserData.UserInfo();
+                            currentUserData.setUserInfo(userInfo);
+                        }
+
+                        // 추출된 데이터로 UserInfo 업데이트
+                        userInfo.setEducation(finalParsedEducation);
+                        userInfo.setCareers(finalParsedCareers);
+                        userInfo.setSpecifications(finalParsedSpecifications);
+
+                        // ViewModel을 통해 데이터 업데이트 및 UI 반영
+                        sharedViewModel.updateUserData(currentUserData);
+                        Toast.makeText(requireContext(), "이력서 내용 불러오기 완료!", Toast.LENGTH_SHORT).show();
+                    });
+
+                }
+            } catch (IOException e) {
+                Log.e("PDF_ERROR", "PDF 처리 중 오류: " + e.getMessage());
+                requireActivity().runOnUiThread(() ->
+                        Toast.makeText(requireContext(), "PDF 파일 처리 중 오류가 발생했습니다: " + e.getMessage(), Toast.LENGTH_LONG).show()
+                );
+            }
+        });
+    }
+
+    private String extractEducation(String pdfText) {
+        String education = "";
+        // "학력사항" 섹션을 찾고 그 이후의 텍스트에서 최종 학력을 추출
+        // PDF 텍스트 추출 시 표 헤더가 반복될 수 있어 이를 제거
+        String cleanedPdfText = pdfText.replaceAll("재학기간\\s*,?학교\\s*,?학과/전공\\s*,?학점\\s*,?졸업구분", "").trim();
+
+        Pattern educationSectionPattern = Pattern.compile("학력사항\\s*\\n([\\s\\S]*?)(?:\\n\\s*\\n|경력사항|대외활동|자격증|외국어|자기소개서)", Pattern.DOTALL);
+        Matcher sectionMatcher = educationSectionPattern.matcher(cleanedPdfText);
+
+        if (sectionMatcher.find()) {
+            String eduBlock = sectionMatcher.group(1).trim();
+            String[] lines = eduBlock.split("\n");
+            // 마지막 유효한 학력 관련 줄을 최종 학력으로 간주
+            for (int i = lines.length - 1; i >= 0; i--) {
+                String line = lines[i].trim();
+                // "대학교", "졸업", "재학" 등의 키워드를 포함하는 줄을 찾음
+                if (!line.isEmpty() && (line.contains("대학교") || line.contains("전문대학") || line.contains("고등학교") || line.contains("졸업") || line.contains("재학") || line.contains("수료"))) {
+                    education = line;
+                    break;
+                }
+            }
+            // 만약 위의 조건으로 찾지 못했다면, 가장 마지막 줄을 최종 학력으로 설정
+            if (education.isEmpty() && lines.length > 0) {
+                education = lines[lines.length - 1].trim();
+            }
+        }
+        Log.d("PDF_PARSE", "추출된 학력: " + education);
+        return education;
+    }
+
+    private List<Career> extractCareers(String pdfText) {
+        List<Career> careers = new ArrayList<>();
+        // "경력사항" 섹션을 찾고 그 이후의 텍스트에서 경력 항목을 추출
+        Pattern careerSectionPattern = Pattern.compile("경력사항\\(인턴, 주요 아르바이트 등\\)\\s*\\n([\\s\\S]*?)(?:\\n\\s*\\n|대외활동 및 봉사활동|자격증/면허증|외국어|자기소개서)", Pattern.DOTALL);
+        Matcher sectionMatcher = careerSectionPattern.matcher(pdfText);
+
+        if (sectionMatcher.find()) {
+            String careerBlock = sectionMatcher.group(1);
+            // 헤더 제거: "직장명", "근무기간", "고용형태", "담당 업무"
+            careerBlock = careerBlock.replaceAll("직장명\\s*,?근무기간\\s*,?고용형태\\s*,?담당 업무", "").trim();
+
+            // 각 경력 항목을 파싱하는 정규식
+            // PDF의 텍스트 추출 방식에 따라 패턴 조정이 필요할 수 있음
+            // 예시: 회사명 \n 근무기간 \n 고용형태 \n 담당업무
+            Pattern careerEntryPattern = Pattern.compile(
+                    "([^\\n]+?)\\n" + // 회사명 (첫 번째 캡처 그룹)
+                            "([^\\n]+?)\\n" + // 근무기간 (두 번째 캡처 그룹)
+                            "(?:[^\\n]+?)\\n" + // 고용형태 (캡처하지 않음)
+                            "([^\\n]+?)(?=\\n\\n|\\n직장명|\\Z)", // 담당 업무 (세 번째 캡처 그룹), 다음 경력 시작 또는 끝까지
+                    Pattern.DOTALL
+            );
+            Matcher entryMatcher = careerEntryPattern.matcher(careerBlock);
+
+            while (entryMatcher.find()) {
+                String company = entryMatcher.group(1).trim();
+                String periodStr = entryMatcher.group(2).trim();
+                String content = entryMatcher.group(3).trim();
+
+                int periodInMonths = 0; // 근무 기간을 월 단위로 저장
+                // "근무기간"에서 년/월 정보를 추출하여 월 단위로 변환
+                // "YYYY.MM ~ YYYY.MM" 형식 또는 "X년 Y개월" 형식 파싱
+                Pattern dateRangePattern = Pattern.compile("(\\d{4})\\.(\\d{2})\\s*~\\s*(\\d{4})\\.(\\d{2})");
+                Matcher dateRangeMatcher = dateRangePattern.matcher(periodStr);
+                if (dateRangeMatcher.find()) {
+                    try {
+                        int startYear = Integer.parseInt(dateRangeMatcher.group(1));
+                        int startMonth = Integer.parseInt(dateRangeMatcher.group(2));
+                        int endYear = Integer.parseInt(dateRangeMatcher.group(3));
+                        int endMonth = Integer.parseInt(dateRangeMatcher.group(4));
+
+                        periodInMonths = (endYear - startYear) * 12 + (endMonth - startMonth);
+                    } catch (NumberFormatException e) {
+                        Log.e("PDF_PARSE", "날짜 범위 파싱 오류: " + periodStr);
+                    }
+                } else {
+                    Pattern yearMonthPattern = Pattern.compile("(?:(\\d+)년)?\\s*(?:(\\d+)개월)?");
+                    Matcher yearMonthMatcher = yearMonthPattern.matcher(periodStr);
+                    if (yearMonthMatcher.find()) {
+                        int years = 0;
+                        int months = 0;
+                        if (yearMonthMatcher.group(1) != null) {
+                            years = Integer.parseInt(yearMonthMatcher.group(1));
+                        }
+                        if (yearMonthMatcher.group(2) != null) {
+                            months = Integer.parseInt(yearMonthMatcher.group(2));
+                        }
+                        periodInMonths = years * 12 + months;
+                    }
+                }
+                careers.add(new Career(company, content, periodInMonths));
+            }
+        }
+        Log.d("PDF_PARSE", "추출된 경력: " + careers.size() + "개");
+        return careers;
+    }
+
+    private List<Specification> extractSpecifications(String pdfText) {
+        List<Specification> specifications = new ArrayList<>();
+
+        // 대외활동 및 봉사활동
+        Pattern externalActivityPattern = Pattern.compile("대외활동 및 봉사활동\\s*\\n([\\s\\S]*?)(?:\\n\\s*\\n|자격증/면허증|외국어|자기소개서)", Pattern.DOTALL);
+        Matcher externalActivityMatcher = externalActivityPattern.matcher(pdfText);
+        if (externalActivityMatcher.find()) {
+            String content = externalActivityMatcher.group(1).trim();
+            content = content.replaceAll("활동명\\s*기간\\s*활동구분\\(간략한 내용\\)\\s*기관 및 장소\\s*", "").trim();
+            if (!content.isEmpty()) {
+                specifications.add(new Specification("대외활동 및 봉사활동", content));
+            }
+        }
+
+        // 자격증/면허증
+        Pattern certificatePattern = Pattern.compile("자격증/면허증\\s*\\n([\\s\\S]*?)(?:\\n\\s*\\n|외국어|자기소개서)", Pattern.DOTALL);
+        Matcher certificateMatcher = certificatePattern.matcher(pdfText);
+        if (certificateMatcher.find()) {
+            String content = certificateMatcher.group(1).trim();
+            content = content.replaceAll("취득일\\s*,?자격증/면허증\\s*,?등급\\(점수\\)\\s*,?발행처\\s*", "").trim();
+            if (!content.isEmpty()) {
+                specifications.add(new Specification("자격증/면허증", content));
+            }
+        }
+
+        // 외국어
+        Pattern foreignLanguagePattern = Pattern.compile("외국어\\s*\\n([\\s\\S]*?)(?:\\n\\s*\\n|자기소개서)", Pattern.DOTALL);
+        Matcher foreignLanguageMatcher = foreignLanguagePattern.matcher(pdfText);
+        if (foreignLanguageMatcher.find()) {
+            String content = foreignLanguageMatcher.group(1).trim();
+            content = content.replaceAll("공인시험\\s*,?점수\\(등급\\)\\s*,?취득일\\s*,?발행처\\s*", "").trim();
+            if (!content.isEmpty()) {
+                specifications.add(new Specification("외국어", content));
+            }
+        }
+
+        // 자기소개서
+        Pattern selfIntroPattern = Pattern.compile("자기소개서\\s*\\n([\\s\\S]*?)(?:\\n\\s*\\n|$)");
+        Matcher selfIntroMatcher = selfIntroPattern.matcher(pdfText);
+        if (selfIntroMatcher.find()) {
+            String selfIntroContent = selfIntroMatcher.group(1).trim();
+            // 질문 헤더 제거 (예: "1. 기업(회사) 지원동기 및 포부 (500자 내외)")
+            selfIntroContent = selfIntroContent.replaceAll("\\d+\\.\\s*[^\\n]+\\s*\\(\\d+자 내외\\)\\s*\\n", "").trim();
+            if (!selfIntroContent.isEmpty()) {
+                specifications.add(new Specification("자기소개서", selfIntroContent));
+            }
+        }
+        Log.d("PDF_PARSE", "추출된 스펙: " + specifications.size() + "개");
+        return specifications;
     }
 
     private void sendUserDataToModel() {
@@ -277,8 +528,6 @@ public class HomeFragment extends Fragment {
             Snackbar.make(requireView(), "사용자 데이터를 불러오지 못했습니다.", Snackbar.LENGTH_SHORT).show();
         }
     }
-
-
     private void updateUserProfile(UserData userData) {
         if (userData != null && userData.getUserInfo() != null) {
             // Preference
@@ -325,7 +574,6 @@ public class HomeFragment extends Fragment {
             specificationAdapter.notifyDataSetChanged();
         }
     }
-
     private void setSpinnerSelection(Spinner spinner, String value) {
         ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
         if (adapter != null) {
@@ -337,9 +585,6 @@ public class HomeFragment extends Fragment {
             }
         }
     }
-
-
-    // 로그아웃
     private void logout() {
         mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();  // Firebase 로그아웃

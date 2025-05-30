@@ -71,4 +71,6 @@ dependencies {
     implementation(libs.okhttp)
 
     implementation (libs.mpandroidchart)
+
+    implementation(libs.pdfbox.android)
 }
